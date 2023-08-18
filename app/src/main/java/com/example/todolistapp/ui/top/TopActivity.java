@@ -2,6 +2,7 @@ package com.example.todolistapp.ui.top;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.room.Room;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
@@ -14,42 +15,31 @@ import com.example.todolistapp.data.TodoDatabase;
 import com.example.todolistapp.data.dao.TodoSheetDao;
 import com.example.todolistapp.data.entities.TodoSheet;
 import com.example.todolistapp.ui.top.adapter.TodoSheetPagerAdapter;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
 import java.util.List;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class TopActivity extends AppCompatActivity {
 
     private ViewPager2 viewPager;
+    private TopViewModel topViewModel;
+    private FloatingActionButton btn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        new Thread() {
-            @Override
-            public void run() {
-                super.run();
-                TodoDatabase db = Room.databaseBuilder(
-                        getApplicationContext(),TodoDatabase.class,
-                        "sample-db"
-                ).build();
-
-                TodoSheet sampleData = new TodoSheet();
-                sampleData.title = "サンプル1";
-
-                TodoSheetDao todoSheetDao = db.todoSheetDao();
-                todoSheetDao.insert(sampleData);
-
-                List<TodoSheet> todoSheets = todoSheetDao.getAll();
-                for (TodoSheet item : todoSheets) {
-                    Log.d("ITEM","title = " + item.title);
-                }
-
-            }
-        }.start();
+        btn = findViewById(R.id.btn);
+        btn.setOnClickListener(view ->{
+            topViewModel.insertTestSample(this);
+        });
+        // ViewModelの生成
+        topViewModel = new ViewModelProvider(this).get(TopViewModel.class);
 
         // ViewPagerを取得
         viewPager = findViewById(R.id.view_pager);
