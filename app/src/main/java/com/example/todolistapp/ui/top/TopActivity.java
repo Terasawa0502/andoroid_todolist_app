@@ -41,15 +41,19 @@ public class TopActivity extends AppCompatActivity {
         bottomSheet = findViewById(R.id.bottom_sheet);
         BottomSheetBehavior behavior = BottomSheetBehavior.from(bottomSheet);
 
-        Button bottomSheetCloseBtn = findViewById(R.id.bottom_sheet_close_btn);
-        bottomSheetCloseBtn.setOnClickListener(v -> {
-            behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-        });
-
+        // FloatingActionButtonが押されたと時の挙動
         btn = findViewById(R.id.btn);
         btn.setOnClickListener(view -> {
             behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+            btn.setVisibility(View.INVISIBLE);
 //            topViewModel.insertTestSample(this);
+        });
+
+        // BottomSheetPageのCloseButtonが押された時の挙動
+        Button bottomSheetCloseBtn = findViewById(R.id.bottom_sheet_close_btn);
+        bottomSheetCloseBtn.setOnClickListener(v -> {
+            behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+            btn.setVisibility(View.VISIBLE);
         });
         // ViewModelの生成
         topViewModel = new ViewModelProvider(this).get(TopViewModel.class);
