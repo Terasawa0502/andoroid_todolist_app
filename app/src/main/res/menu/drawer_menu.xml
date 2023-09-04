@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/firstDrawer"
+        android:title="カレンダー" />
+    <item
+        android:id="@+id/secondDrawer"
+        android:title="期限付き" />
+    <item
+        android:id="@+id/thirdDrawer"
+        android:title="ゴミ箱" />
+
+</menu>
