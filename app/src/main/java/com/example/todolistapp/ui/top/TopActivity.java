@@ -88,5 +88,42 @@ public class TopActivity extends AppCompatActivity {
         drawer.addDrawerListener(toggle);
         toggle.syncState();
     }
-    
+
+    /**
+     * ボトムシートの設定
+     */
+    private void bottomSheetAndFabSettings() {
+        FloatingActionButton btn = findViewById(R.id.btn);
+        View bottomSheet = findViewById(R.id.bottom_sheet);
+        BottomSheetBehavior behavior = BottomSheetBehavior.from(bottomSheet);
+        behavior.addBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View bottomSheet, int newState) {
+                EditText editText = bottomSheet.findViewById(R.id.text);
+                if (newState ==BottomSheetBehavior.STATE_COLLAPSED ) {
+                    btn.setVisibility(View.VISIBLE);
+                    KeyboardUtil.hideSoftKeyboard(TopActivity.this, editText);
+                } else if (newState == BottomSheetBehavior.STATE_EXPANDED) {
+                    KeyboardUtil.showSoftKeyboard(TopActivity.this, editText);
+                    btn.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+                // nothing to do
+            }
+        });
+
+        // FloatingActionButtonが押された時の挙動
+        btn.setOnClickListener(view -> {
+            behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+        });
+
+        // BottomSheetPageのCloseButtonが押された時の挙動
+        Button bottomSheetCloseBtn = findViewById(R.id.bottom_sheet_close_btn);
+        bottomSheetCloseBtn.setOnClickListener(v -> {
+            behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        });
+    }
 }
