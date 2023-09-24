@@ -46,9 +46,10 @@
         <androidx.appcompat.widget.LinearLayoutCompat
             android:id="@+id/bottom_sheet"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="450dp"
             android:background="@android:color/white"
             android:orientation="vertical"
+            android:gravity="center"
             android:layout_gravity="center"
             app:behavior_peekHeight="0dp"
             app:layout_behavior="@string/bottom_sheet_behavior">
@@ -57,20 +58,16 @@
                 android:id="@+id/text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:padding="5dp"
-                android:text="入力してください"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:padding="20dp"/>
 
             <Button
                 android:id="@+id/bottom_sheet_close_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center|end"
+                android:padding="5dp"
                 android:text="閉じる"
-                android:textSize="25sp" />
+                android:textSize="15sp" />
 
         </androidx.appcompat.widget.LinearLayoutCompat>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
