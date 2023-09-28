@@ -2,4 +2,8 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="cityBlue">#387bbc</color>
+    <color name="lightCherry">#fbe3e5</color>
+    <color name="flamingo">#e699ac</color>
+    <color name="darkFlamingo">#D75B79</color>
 </resources>
