@@ -14,7 +14,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?actionBarSize"
-            android:background="?attr/colorPrimary"
+            android:background="@color/flamingo"
             android:theme="?attr/actionBarTheme"
             app:title="ナビゲーションメニュー" />
 
@@ -22,12 +22,16 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:layout_marginTop="?actionBarSize">
+            android:layout_marginTop="?actionBarSize"
+            android:background="@color/lightCherry">
 
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tab_layout"
+                android:background="@color/flamingo"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                app:tabTextColor="@color/white"
+                app:tabSelectedTextColor="@color/darkFlamingo"/>
 
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/view_pager"
@@ -38,10 +42,13 @@
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
             android:layout_gravity="bottom|end"
-            android:src="@drawable/ic_my_icon"/>
+            android:layout_margin="16dp"
+            android:src="@drawable/ic_checks"
+            app:tint="#fff"
+            app:backgroundTint="@color/cityBlue"/>
 
         <androidx.appcompat.widget.LinearLayoutCompat
             android:id="@+id/bottom_sheet"
@@ -78,6 +85,9 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         app:headerLayout="@layout/drawer_header"
-        app:menu="@menu/drawer_menu"/>
+        app:menu="@menu/drawer_menu"
+        android:background="@color/lightCherry"
+        app:itemTextColor="@color/darkFlamingo"
+        app:itemIconTint="@color/darkFlamingo"/>
 
 </androidx.drawerlayout.widget.DrawerLayout>
