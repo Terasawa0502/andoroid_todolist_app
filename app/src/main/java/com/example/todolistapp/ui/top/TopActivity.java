@@ -96,13 +96,13 @@ public class TopActivity extends AppCompatActivity {
      */
     static String TAG = "TestMenuLog";
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(@NonNull Menu menu) {
         getMenuInflater().inflate(R.menu.drawer_menu, menu);
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
             // DrawerItem("カレンダー")のタップしたとき
         if (item.getItemId() == R.id.calenderScreen) {
             Log.d(TAG, "CalenderScreen Selected!");

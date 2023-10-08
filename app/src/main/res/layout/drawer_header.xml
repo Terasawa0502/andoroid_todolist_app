@@ -7,6 +7,12 @@
     android:background="@color/flamingo"
     android:id="@+id/drawer">
 
+    <ImageView
+        android:layout_width="160dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="center|start"
+        android:src="@drawable/ic_launcher_foreground"/>
+
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="wrap_content"
         android:layout_height="32dp"
