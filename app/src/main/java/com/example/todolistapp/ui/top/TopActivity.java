@@ -12,6 +12,8 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -36,28 +38,25 @@ public class TopActivity extends AppCompatActivity {
 
     private ViewPager2 viewPager;
     private TopViewModel topViewModel;
+    private Menu menu;
+    private MenuItem item;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        // ナビゲーションの設定
+        // Navigationの設定
         initNavigation();
-        // ボトムシートの設定
+        // BottomSheetの設定
         bottomSheetAndFabSettings();
-
         // ViewModelの生成
         topViewModel = new ViewModelProvider(this).get(TopViewModel.class);
-
         // ViewPagerを取得
         viewPager = findViewById(R.id.view_pager);
-
         // Adapterを作成
         FragmentStateAdapter pagerAdapter = new TodoSheetPagerAdapter(this);
-
         // ViewPagerにAdapterをセットする
         viewPager.setAdapter(pagerAdapter);
-
         // TabLayoutを取得する
         TabLayout tablayout = findViewById(R.id.tab_layout);
         // TabLayoutとViewPagerの紐付けを行う
@@ -68,6 +67,7 @@ public class TopActivity extends AppCompatActivity {
                 tab.setText("TAB" + (position + 1));
             }
         }).attach();
+
     }
 
     /**
@@ -87,6 +87,33 @@ public class TopActivity extends AppCompatActivity {
         );
         drawer.addDrawerListener(toggle);
         toggle.syncState();
+    }
+
+    /**
+     * メニューの設定
+     * @param menu
+     * @return
+     */
+    static String TAG = "TestMenuLog";
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.drawer_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+            // DrawerItem("カレンダー")のタップしたとき
+        if (item.getItemId() == R.id.calenderScreen) {
+            Log.d(TAG, "CalenderScreen Selected!");
+            // DrawerItem("期限付き")のタップしたとき
+        } else if (item.getItemId() == R.id.timeLimit) {
+            Log.d(TAG, "timeLimit Selected!");
+            // DrawerItem("ゴミ箱")のタップしたとき
+        } else if (item.getItemId() == R.id.trashBox) {
+            Log.d(TAG, "trashBox Selected!");
+        }
+        return true;
     }
 
     /**
