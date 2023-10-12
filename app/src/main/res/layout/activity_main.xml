@@ -15,8 +15,7 @@
             android:layout_width="match_parent"
             android:layout_height="?actionBarSize"
             android:background="@color/flamingo"
-            android:theme="?attr/actionBarTheme"
-            app:title="ナビゲーションメニュー" />
+            android:theme="?attr/actionBarTheme" />
 
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
@@ -62,9 +61,10 @@
             app:layout_behavior="@string/bottom_sheet_behavior">
 
             <EditText
-                android:id="@+id/text"
+                android:id="@+id/input_title_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="@color/black"
                 android:padding="20dp"/>
 
             <Button
@@ -73,7 +73,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center|end"
                 android:padding="5dp"
-                android:text="閉じる"
+                android:text="@string/close"
                 android:textSize="15sp" />
 
         </androidx.appcompat.widget.LinearLayoutCompat>
