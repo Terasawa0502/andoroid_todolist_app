@@ -162,4 +162,28 @@ public class TopActivity extends AppCompatActivity implements TextWatcher {
         // inputTitleText
         inputTitleText.addTextChangedListener(this);
     }
+
+    // TextWatcher実装メソッド
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        // nothing to do
+//        Log.d(TAG, "beforeTextChanged: char = " + s + "/ start = " + start + "/ count = " + count + "/ after =" +after);
+    }
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+//        Log.d(TAG, "onTextChanged: char = " + s.toString() +"/ start = " + start + "/ before = " +before + "/ count = " + count);
+        if (bottomSheetCloseBtn == null) return;
+        if (s.toString().isEmpty()) {
+            // 文字が空の場合
+            bottomSheetCloseBtn.setText(getString(R.string.close));
+        } else {
+            // 文字が空じゃない場合
+            bottomSheetCloseBtn.setText(getString(R.string.add));
+        }
+    }
+    @Override
+    public void afterTextChanged(Editable s) {
+        // nothing to do
+//        Log.d(TAG, "afterTextChanged: editable = " +s.toString());
+    }
 }
