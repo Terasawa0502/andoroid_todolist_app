@@ -9,57 +9,53 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.room.Room;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
-
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-
 import com.example.todolistapp.R;
-import com.example.todolistapp.data.TodoDatabase;
-import com.example.todolistapp.data.dao.TodoSheetDao;
-import com.example.todolistapp.data.entities.TodoSheet;
 import com.example.todolistapp.ui.top.adapter.TodoSheetPagerAdapter;
 import com.example.todolistapp.util.KeyboardUtil;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
-
-import java.util.List;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
-public class TopActivity extends AppCompatActivity {
+public class TopActivity extends AppCompatActivity implements TextWatcher {
 
+    private static final String TAG = TopActivity.class.getSimpleName();
     private ViewPager2 viewPager;
     private TopViewModel topViewModel;
-    private Menu menu;
-    private MenuItem item;
+    private DrawerLayout drawer;
+    private Button bottomSheetCloseBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        // Navigationの設定
+        // ナビゲーション設定
         initNavigation();
-        // BottomSheetの設定
+        initNavigationMenu();
+        // ボトムシートの設定
         bottomSheetAndFabSettings();
-        // ViewModelの生成
+        // ビューモデルの生成
         topViewModel = new ViewModelProvider(this).get(TopViewModel.class);
-        // ViewPagerを取得
+        // ビューページャーを取得
         viewPager = findViewById(R.id.view_pager);
-        // Adapterを作成
+        // アダプタを作成
         FragmentStateAdapter pagerAdapter = new TodoSheetPagerAdapter(this);
-        // ViewPagerにAdapterをセットする
+        // ビューページャーにアダプタをセットする
         viewPager.setAdapter(pagerAdapter);
-        // TabLayoutを取得する
+        // タブレイアウトを取得する
         TabLayout tablayout = findViewById(R.id.tab_layout);
-        // TabLayoutとViewPagerの紐付けを行う
+        // タブレイアウトとビューページャーの紐付けを行う
         new TabLayoutMediator(tablayout, viewPager, new TabLayoutMediator.TabConfigurationStrategy() {
             @Override
             public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
@@ -77,9 +73,12 @@ public class TopActivity extends AppCompatActivity {
         // Toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        // Toolbarのタイトルを非表示にする
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+        };
         // DrawerToggle
-        DrawerLayout drawer = findViewById(R.id.drawerLayout);
+        drawer = findViewById(R.id.drawerLayout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this,drawer,toolbar,
                 R.string.drawer_open,
@@ -90,31 +89,30 @@ public class TopActivity extends AppCompatActivity {
     }
 
     /**
-     * メニューの設定
-     * @param menu
-     * @return
+     * ナビゲーションメニューの設定
      */
-    static String TAG = "TestMenuLog";
-    @Override
-    public boolean onCreateOptionsMenu(@NonNull Menu menu) {
-        getMenuInflater().inflate(R.menu.drawer_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-            // DrawerItem("カレンダー")のタップしたとき
-        if (item.getItemId() == R.id.calenderScreen) {
-            Log.d(TAG, "CalenderScreen Selected!");
-            // DrawerItem("期限付き")のタップしたとき
-        } else if (item.getItemId() == R.id.timeLimit) {
-            Log.d(TAG, "timeLimit Selected!");
-            // DrawerItem("ゴミ箱")のタップしたとき
-        } else if (item.getItemId() == R.id.trashBox) {
-            Log.d(TAG, "trashBox Selected!");
-        }
-        return true;
-    }
+    public void initNavigationMenu() {
+        // NavigationViewの取得
+        NavigationView navigationView = findViewById(R.id.navView);
+        navigationView.setNavigationItemSelectedListener(item -> {
+            int itemId = item.getItemId();
+            if (itemId == R.id.calenderScreen) {
+                // TODO: カレンダー選択時の処理
+                Log.d(TAG, "カレンダーを選択");
+            } else if (itemId == R.id.timeLimit) {
+                // TODO: 期限付き選択時の処理
+                Log.d(TAG, "期限付きを選択");
+            } else if (itemId == R.id.trashBox) {
+                // TODO: ゴミ箱選択時の処理
+                Log.d(TAG, "ゴミ箱を選択");
+            }
+            if (drawer != null) {
+                // ドロワーを閉じる
+                drawer.close();
+            }
+                return true;
+        });
+    };
 
     /**
      * ボトムシートの設定
@@ -122,16 +120,18 @@ public class TopActivity extends AppCompatActivity {
     private void bottomSheetAndFabSettings() {
         FloatingActionButton btn = findViewById(R.id.btn);
         View bottomSheet = findViewById(R.id.bottom_sheet);
+        EditText inputTitleText = bottomSheet.findViewById(R.id.input_title_text);
         BottomSheetBehavior behavior = BottomSheetBehavior.from(bottomSheet);
         behavior.addBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
-                EditText editText = bottomSheet.findViewById(R.id.text);
                 if (newState ==BottomSheetBehavior.STATE_COLLAPSED ) {
                     btn.setVisibility(View.VISIBLE);
-                    KeyboardUtil.hideSoftKeyboard(TopActivity.this, editText);
+                    if (inputTitleText == null) return;
+                    KeyboardUtil.hideSoftKeyboard(TopActivity.this, inputTitleText);
                 } else if (newState == BottomSheetBehavior.STATE_EXPANDED) {
-                    KeyboardUtil.showSoftKeyboard(TopActivity.this, editText);
+                    if (inputTitleText == null) return;
+                    KeyboardUtil.showSoftKeyboard(TopActivity.this, inputTitleText);
                     btn.setVisibility(View.GONE);
                 }
             }
@@ -148,9 +148,18 @@ public class TopActivity extends AppCompatActivity {
         });
 
         // BottomSheetPageのCloseButtonが押された時の挙動
-        Button bottomSheetCloseBtn = findViewById(R.id.bottom_sheet_close_btn);
+        bottomSheetCloseBtn = findViewById(R.id.bottom_sheet_close_btn);
         bottomSheetCloseBtn.setOnClickListener(v -> {
-            behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+            String btnTitle = ((Button) v).getText().toString();
+            if (btnTitle.equals(getString(R.string.close))){
+                // 閉じる処理
+                behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+            } else if (btnTitle.equals(getString(R.string.add))) {
+                // TODO: 追加処理
+            }
         });
+
+        // inputTitleText
+        inputTitleText.addTextChangedListener(this);
     }
 }
