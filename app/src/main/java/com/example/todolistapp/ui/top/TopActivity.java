@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import com.example.todolistapp.R;
+import com.example.todolistapp.data.entities.TodoSheet;
 import com.example.todolistapp.ui.top.adapter.TodoSheetPagerAdapter;
 import com.example.todolistapp.util.KeyboardUtil;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
@@ -24,6 +25,9 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -50,19 +54,29 @@ public class TopActivity extends AppCompatActivity implements TextWatcher {
         // ビューページャーを取得
         viewPager = findViewById(R.id.view_pager);
         // アダプタを作成
-        FragmentStateAdapter pagerAdapter = new TodoSheetPagerAdapter(this);
+        FragmentStateAdapter pagerAdapter = new TodoSheetPagerAdapter(this, new ArrayList<>());
         // ビューページャーにアダプタをセットする
         viewPager.setAdapter(pagerAdapter);
         // タブレイアウトを取得する
         TabLayout tablayout = findViewById(R.id.tab_layout);
         // タブレイアウトとビューページャーの紐付けを行う
-        new TabLayoutMediator(tablayout, viewPager, new TabLayoutMediator.TabConfigurationStrategy() {
-            @Override
-            public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
-                //　TabLayoutに表示するタイトルを設定する
-                tab.setText("TAB" + (position + 1));
-            }
+        new TabLayoutMediator(tablayout, viewPager, (tab, position) -> {
+            List<TodoSheet> dataList = ((TodoSheetPagerAdapter) viewPager.getAdapter()).getTodoSheetList();
+            String title = dataList.get(position).title;
+            //　TabLayoutに表示するタイトルを設定する
+            tab.setText(title);
         }).attach();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // todoSheetデータ取得
+        topViewModel.getTodoSheetAll(todoSheetList -> {
+            runOnUiThread(() -> {
+                ((TodoSheetPagerAdapter) viewPager.getAdapter()).updateTodoSheetList(todoSheetList);
+            });
+        });
 
     }
 
@@ -135,7 +149,6 @@ public class TopActivity extends AppCompatActivity implements TextWatcher {
                     btn.setVisibility(View.GONE);
                 }
             }
-
             @Override
             public void onSlide(@NonNull View bottomSheet, float slideOffset) {
                 // nothing to do
@@ -155,7 +168,18 @@ public class TopActivity extends AppCompatActivity implements TextWatcher {
                 // 閉じる処理
                 behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
             } else if (btnTitle.equals(getString(R.string.add))) {
-                // TODO: 追加処理
+                // 追加処理
+                String title = inputTitleText.getText().toString();
+                topViewModel.insertToDoSheet(title, () -> runOnUiThread(() -> {
+                    // TodoSheetのデータの追加完了
+                    topViewModel.getTodoSheetAll(todoSheetList -> {
+                        runOnUiThread(() -> {
+                            ((TodoSheetPagerAdapter)viewPager.getAdapter())
+                                    .updateTodoSheetList(todoSheetList);
+                            inputTitleText.setText("");
+                        });
+                    });
+                }));
             }
         });
 
