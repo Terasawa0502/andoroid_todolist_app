@@ -1,14 +1,18 @@
 package com.example.todolistapp.ui.top;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.room.Room;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
+
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -17,7 +21,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import com.example.todolistapp.R;
+import com.example.todolistapp.data.entities.Todo;
 import com.example.todolistapp.data.entities.TodoSheet;
+import com.example.todolistapp.ui.newCreate.NewCreateActivity;
 import com.example.todolistapp.ui.top.adapter.TodoSheetPagerAdapter;
 import com.example.todolistapp.util.KeyboardUtil;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
@@ -39,10 +45,25 @@ public class TopActivity extends AppCompatActivity implements TextWatcher {
     private TopViewModel topViewModel;
     private DrawerLayout drawer;
     private Button bottomSheetCloseBtn;
+    private ActivityResultLauncher startForResult =
+            registerForActivityResult(new StartActivityForResult(), result -> {
+                if (result.getResultCode() == Activity.RESULT_OK) {
+                    Intent data = result.getData();
+                    String title = data.getStringExtra(NewCreateActivity.KEY_TITLE);
+                    Log.d("TEST", "title = " +title);
+                    // TODO:titleをデータベースに入れる
+                    topViewModel.insertToDoSheet(title, () -> {
+                        // nothing to do
+                        });
+                    }
+            }
+    );
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
         setContentView(R.layout.activity_main);
         // ナビゲーション設定
         initNavigation();
@@ -51,6 +72,7 @@ public class TopActivity extends AppCompatActivity implements TextWatcher {
         bottomSheetAndFabSettings();
         // ビューモデルの生成
         topViewModel = new ViewModelProvider(this).get(TopViewModel.class);
+        topViewModel.init();
         // ビューページャーを取得
         viewPager = findViewById(R.id.view_pager);
         // アダプタを作成
@@ -66,18 +88,32 @@ public class TopActivity extends AppCompatActivity implements TextWatcher {
             //　TabLayoutに表示するタイトルを設定する
             tab.setText(title);
         }).attach();
-    }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        // todoSheetデータ取得
-        topViewModel.getTodoSheetAll(todoSheetList -> {
-            runOnUiThread(() -> {
-                ((TodoSheetPagerAdapter) viewPager.getAdapter()).updateTodoSheetList(todoSheetList);
-            });
+        findViewById(R.id.plus_btn).setOnClickListener(v -> {
+          // TODO: NewCreateActivityに表示する
+          Intent intent = new Intent(this, NewCreateActivity.class);
+          // Activityを呼び出して終了したら通知を受け取る
+          startForResult.launch(intent);
+          overridePendingTransition(R.anim.slide_in_up,R.anim.slide_out_up);
         });
 
+        // observeの設定(LiveDataの値が変更された場合の処理を記述)
+        topViewModel.getTodoSheetAll().observe(this, todoSheetList -> {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    for (TodoSheet todoSheet: todoSheetList) {
+                        // TODO: Todoの項目データを取得
+                        List<Todo> todoList = topViewModel.getTodoListById(todoSheet.id);
+
+                    }
+                    // TODO: 箱を入れ替える
+                    runOnUiThread(() -> {
+                        ((TodoSheetPagerAdapter) viewPager.getAdapter()).updateTodoSheetList(todoSheetList);
+                    });
+                }
+            }).start();
+        });
     }
 
     /**
@@ -172,13 +208,8 @@ public class TopActivity extends AppCompatActivity implements TextWatcher {
                 String title = inputTitleText.getText().toString();
                 topViewModel.insertToDoSheet(title, () -> runOnUiThread(() -> {
                     // TodoSheetのデータの追加完了
-                    topViewModel.getTodoSheetAll(todoSheetList -> {
-                        runOnUiThread(() -> {
-                            ((TodoSheetPagerAdapter)viewPager.getAdapter())
-                                    .updateTodoSheetList(todoSheetList);
-                            inputTitleText.setText("");
-                        });
-                    });
+                        runOnUiThread(() -> {inputTitleText.setText("");}
+                        );
                 }));
             }
         });

@@ -1,5 +1,6 @@
 package com.example.todolistapp.data.dao;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -18,7 +19,7 @@ public interface TodoSheetDao {
     void insert(TodoSheet todoSheet);
 
     @Query("SELECT * FROM todo_sheet")
-    List<TodoSheet> getAll();
+    LiveData<List<TodoSheet>> getAll();
 
     @Delete
     void delete(TodoSheet todoSheet);

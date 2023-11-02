@@ -1,6 +1,9 @@
 package com.example.todolistapp.ui.top;
 
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
+
+import com.example.todolistapp.data.entities.Todo;
 import com.example.todolistapp.data.entities.TodoSheet;
 import com.example.todolistapp.data.repositories.ToDoListRepository;
 
@@ -16,25 +19,18 @@ public class TopViewModel extends ViewModel {
         void onComplete();
     }
 
-    interface GetTodoSheetAllCallback {
-        void onComplete(List<TodoSheet> todoSheetList);
-    }
     private ToDoListRepository repository;
+    private LiveData<List<TodoSheet>> listLiveData;
 
     @Inject
     TopViewModel(ToDoListRepository repository) {
         this.repository = repository;
     }
-
-    public void getTodoSheetAll(GetTodoSheetAllCallback callback) {
-        new Thread() {
-            @Override
-            public void run() {
-                super.run();
-                List<TodoSheet> todoSheetList =repository.getAllTodoSheet();
-                callback.onComplete(todoSheetList);
-            }
-        }.start();
+    public void init() {
+        listLiveData = repository.getAllTodoSheet();
+    }
+    public LiveData<List<TodoSheet>> getTodoSheetAll() {
+        return listLiveData;
     }
     public void insertToDoSheet(String title, InsertTodoSheetCallback callback) {
         new Thread() {
@@ -48,4 +44,9 @@ public class TopViewModel extends ViewModel {
             }
         }.start();
     }
+    public List<Todo> getTodoListById(int id) {
+        return repository.getTodoListById(id);
+    }
+
+
 }

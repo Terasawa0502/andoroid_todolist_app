@@ -1,6 +1,8 @@
 package com.example.todolistapp.data.repositories;
 
 import android.content.Context;
+
+import androidx.lifecycle.LiveData;
 import androidx.room.Room;
 import com.example.todolistapp.data.TodoDatabase;
 import com.example.todolistapp.data.dao.TodoDao;
@@ -14,6 +16,7 @@ public class ToDoListRepository {
     private TodoDatabase db;
     private TodoDao todoDao;
     private TodoSheetDao todoSheetDao;
+    private LiveData<List<TodoSheet>> listTodoSheet;
 
     public ToDoListRepository(Context context) {
         db = Room.databaseBuilder(
@@ -22,6 +25,7 @@ public class ToDoListRepository {
         ).build();
         todoDao = db.todoDao();
         todoSheetDao = db.todoSheetDao();
+        listTodoSheet = todoSheetDao.getAll();
     }
 
     public void insertTodoItem(Todo item) {
@@ -35,7 +39,7 @@ public class ToDoListRepository {
     public List<Todo> getTodoListById(int id) {
         return todoDao.getTodoListById(id);
     }
-    public List<TodoSheet> getAllTodoSheet() {
-        return todoSheetDao.getAll();
+    public LiveData<List<TodoSheet>> getAllTodoSheet() {
+        return listTodoSheet;
     }
 }
