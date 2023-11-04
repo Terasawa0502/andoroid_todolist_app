@@ -4,10 +4,12 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.EditText;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.todolistapp.R;
+import com.example.todolistapp.util.KeyboardUtil;
 
 public class NewCreateActivity extends AppCompatActivity {
 
@@ -16,12 +18,12 @@ public class NewCreateActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_newcreate);
-
         // シート追加ボタンを押した時の挙動
         findViewById(R.id.add_btn).setOnClickListener(v ->{
-
+            EditText inputListTitle = findViewById(R.id.input_list_title);
+            String title = inputListTitle.getText().toString();
             Intent intent = new Intent();
-            intent.putExtra(KEY_TITLE, "NewSheet");
+            intent.putExtra(KEY_TITLE, title);
             setResult(Activity.RESULT_OK, intent);
             finish();
         });
@@ -32,8 +34,5 @@ public class NewCreateActivity extends AppCompatActivity {
         });
 
     }
-
-    // editテキストを取得して、クリックリスナーに定義
-    //　editテキストでいレタ内容をTopActivityに返す
 
 }
