@@ -23,6 +23,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.newCreate.NewCreateActivity"></activity>
+        <activity android:name=".ui.calendar.NewCalenderActivity"></activity>
     </application>
 
 </manifest>

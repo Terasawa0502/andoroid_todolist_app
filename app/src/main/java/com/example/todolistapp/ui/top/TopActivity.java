@@ -19,10 +19,14 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CalendarView;
 import android.widget.EditText;
+import android.widget.Toast;
+
 import com.example.todolistapp.R;
 import com.example.todolistapp.data.entities.Todo;
 import com.example.todolistapp.data.entities.TodoSheet;
+import com.example.todolistapp.ui.calendar.NewCalenderActivity;
 import com.example.todolistapp.ui.newCreate.NewCreateActivity;
 import com.example.todolistapp.ui.top.adapter.TodoSheetPagerAdapter;
 import com.example.todolistapp.util.KeyboardUtil;
@@ -62,8 +66,6 @@ public class TopActivity extends AppCompatActivity implements TextWatcher {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
         setContentView(R.layout.activity_main);
         // ナビゲーション設定
         initNavigation();
@@ -148,6 +150,9 @@ public class TopActivity extends AppCompatActivity implements TextWatcher {
             int itemId = item.getItemId();
             if (itemId == R.id.calenderScreen) {
                 // TODO: カレンダー選択時の処理
+                Intent intent = new Intent(this, NewCalenderActivity.class);
+                startActivity(intent);
+                overridePendingTransition(R.anim.slide_in_up,R.anim.slide_out_up);
                 Log.d(TAG, "カレンダーを選択");
             } else if (itemId == R.id.timeLimit) {
                 // TODO: 期限付き選択時の処理
@@ -213,7 +218,6 @@ public class TopActivity extends AppCompatActivity implements TextWatcher {
                 }));
             }
         });
-
         // inputTitleText
         inputTitleText.addTextChangedListener(this);
     }
