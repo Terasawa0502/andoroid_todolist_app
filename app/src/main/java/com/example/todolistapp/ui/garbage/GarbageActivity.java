@@ -1,11 +1,8 @@
 package com.example.todolistapp.ui.garbage;
 
 import android.os.Bundle;
-import android.view.View;
-
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.example.todolistapp.R;
 
 public class GarbageActivity extends AppCompatActivity {

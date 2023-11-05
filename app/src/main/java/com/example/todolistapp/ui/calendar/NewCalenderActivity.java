@@ -1,13 +1,10 @@
 package com.example.todolistapp.ui.calendar;
 
 import android.os.Bundle;
-import android.view.View;
 import android.widget.CalendarView;
 import android.widget.Toast;
-
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.example.todolistapp.R;
 
 public class NewCalenderActivity extends AppCompatActivity {

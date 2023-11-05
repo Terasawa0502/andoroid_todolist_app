@@ -3,13 +3,10 @@ package com.example.todolistapp.ui.newCreate;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.EditText;
-
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.todolistapp.R;
-import com.example.todolistapp.util.KeyboardUtil;
 
 public class NewCreateActivity extends AppCompatActivity {
 
