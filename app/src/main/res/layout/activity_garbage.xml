@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="15dp">
+
+    <Button
+        android:id="@+id/garbage_back_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="戻る"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_gravity="top|start"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ゴミ箱"
+        android:textSize="32sp"
+        android:textStyle="bold"
+        android:textColor="@color/darkFlamingo"
+        android:layout_gravity="top|center"/>
+
+    <Button
+        android:id="@+id/all_delete_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="全削除"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_gravity="top|end"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="削除リスト一覧表示予定"
+        android:textSize="30sp"
+        android:textStyle="bold"/>
+
+</FrameLayout>

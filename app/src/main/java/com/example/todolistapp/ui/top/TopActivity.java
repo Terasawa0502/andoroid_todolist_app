@@ -27,6 +27,7 @@ import com.example.todolistapp.R;
 import com.example.todolistapp.data.entities.Todo;
 import com.example.todolistapp.data.entities.TodoSheet;
 import com.example.todolistapp.ui.calendar.NewCalenderActivity;
+import com.example.todolistapp.ui.garbage.GarbageActivity;
 import com.example.todolistapp.ui.newCreate.NewCreateActivity;
 import com.example.todolistapp.ui.top.adapter.TodoSheetPagerAdapter;
 import com.example.todolistapp.util.KeyboardUtil;
@@ -152,13 +153,14 @@ public class TopActivity extends AppCompatActivity implements TextWatcher {
                 // TODO: カレンダー選択時の処理
                 Intent intent = new Intent(this, NewCalenderActivity.class);
                 startActivity(intent);
-                overridePendingTransition(R.anim.slide_in_up,R.anim.slide_out_up);
                 Log.d(TAG, "カレンダーを選択");
             } else if (itemId == R.id.timeLimit) {
                 // TODO: 期限付き選択時の処理
                 Log.d(TAG, "期限付きを選択");
-            } else if (itemId == R.id.trashBox) {
+            } else if (itemId == R.id.garbageBox) {
                 // TODO: ゴミ箱選択時の処理
+                Intent intent = new Intent(this, GarbageActivity.class);
+                startActivity(intent);
                 Log.d(TAG, "ゴミ箱を選択");
             }
             if (drawer != null) {

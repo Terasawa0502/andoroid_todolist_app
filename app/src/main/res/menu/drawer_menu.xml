@@ -9,7 +9,7 @@
         android:icon="@drawable/ic_time"
         android:title="期限付き" />
     <item
-        android:id="@+id/trashBox"
+        android:id="@+id/garbageBox"
         android:icon="@drawable/ic_trash"
         android:title="ゴミ箱" />
 
