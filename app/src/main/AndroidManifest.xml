@@ -25,6 +25,7 @@
         <activity android:name=".ui.newCreate.NewCreateActivity"></activity>
         <activity android:name=".ui.calendar.NewCalenderActivity"></activity>
         <activity android:name=".ui.garbage.GarbageActivity"></activity>
+        <activity android:name=".ui.timeLimit.TimeLimitActivity"></activity>
     </application>
 
 </manifest>
