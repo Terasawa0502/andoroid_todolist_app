@@ -71,6 +71,14 @@
             app:tint="#fff"
             app:backgroundTint="@color/cityBlue"/>
 
+        <Button
+            android:id="@+id/garbage_btn"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_gravity="bottom|start"
+            android:layout_margin="16dp"
+            android:src="@drawable/ic_trash"/>
+
         <androidx.appcompat.widget.LinearLayoutCompat
             android:id="@+id/bottom_sheet"
             android:layout_width="match_parent"

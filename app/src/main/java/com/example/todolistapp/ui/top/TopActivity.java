@@ -93,6 +93,7 @@ public class TopActivity extends AppCompatActivity implements TextWatcher {
             tab.setText(title);
         }).attach();
 
+        // リスト横の+ボタンを押した時の挙動
         findViewById(R.id.plus_btn).setOnClickListener(v -> {
           // TODO: NewCreateActivityに表示する
           Intent intent = new Intent(this, NewCreateActivity.class);
@@ -117,6 +118,12 @@ public class TopActivity extends AppCompatActivity implements TextWatcher {
                     });
                 }
             }).start();
+        });
+
+        // ゴミ箱ボタンを押した時の挙動
+        findViewById(R.id.garbage_btn).setOnClickListener(v -> {
+            Intent intent = new Intent(this, GarbageActivity.class);
+            startActivity(intent);
         });
     }
 
