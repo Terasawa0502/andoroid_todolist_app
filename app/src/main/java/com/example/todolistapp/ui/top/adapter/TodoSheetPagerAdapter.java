@@ -5,9 +5,11 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
+import com.example.todolistapp.data.entities.Todo;
 import com.example.todolistapp.data.entities.TodoSheet;
 import com.example.todolistapp.ui.top.ToDoSheetFragment;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TodoSheetPagerAdapter extends FragmentStateAdapter {
@@ -33,12 +35,12 @@ public class TodoSheetPagerAdapter extends FragmentStateAdapter {
     @Override
     public Fragment createFragment(int position) {
         TodoSheet data = todoSheetList.get(position);
-        // TODO: 後でやる
-        return ToDoSheetFragment.newInstance();
+        return ToDoSheetFragment.newInstance(data.id);
     }
 
     @Override
     public int getItemCount() {
         return todoSheetList.size();
     }
+
 }
