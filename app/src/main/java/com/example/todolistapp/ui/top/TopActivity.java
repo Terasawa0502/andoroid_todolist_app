@@ -7,6 +7,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
@@ -244,16 +245,13 @@ public class TopActivity extends AppCompatActivity implements TextWatcher, ToDoS
                 List<TodoSheet> todoSheetList = topViewModel.getTodoSheetAll().getValue();
                 TodoSheet currentTodoSheet = todoSheetList.get(position);
                 topViewModel.insertTodoItem(currentTodoSheet.id, title, () -> {
-                    runOnUiThread(() -> {
-                        // TODO: 表示更新処理
-                    });
+                    getTodoList(currentTodoSheet.id, todoList ->
+                        runOnUiThread(() -> {
+                        // 表示更新処理
+                        Fragment fragment = getSupportFragmentManager().findFragmentByTag("f" + position);
+                        ((ToDoSheetFragment) fragment).updateTodoDataList(todoList);
+                    }));
                 });
-//
-//                topViewModel.insertToDoSheet(title, () -> runOnUiThread(() -> {
-//                    // TodoSheetのデータの追加完了
-//                        runOnUiThread(() -> {inputTitleText.setText("");}
-//                        );
-//                }));
             }
         });
         // inputTitleText
@@ -294,5 +292,11 @@ public class TopActivity extends AppCompatActivity implements TextWatcher, ToDoS
                 callback.onComplete(todoList);
             }
         }.start();
+    }
+
+    @Override
+    public void onChangeTodoCheck(Todo todo) {
+        // Todoデータを更新する
+        new Thread(() -> topViewModel.updateTodoData(todo)).start();
     }
 }

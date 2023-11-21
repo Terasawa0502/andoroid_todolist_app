@@ -1,5 +1,6 @@
 package com.example.todolistapp.ui.top;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 
@@ -13,6 +14,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.TextView;
 
 import com.example.todolistapp.R;
 import com.example.todolistapp.data.entities.Todo;
@@ -27,6 +31,7 @@ public class ToDoSheetFragment extends Fragment {
 
     interface ToDoSheetFragmentListener {
         void getTodoList(int listId, GetTodoListCallback callback);
+        void onChangeTodoCheck(Todo todo);
     }
 
     interface GetTodoListCallback{
@@ -74,43 +79,63 @@ public class ToDoSheetFragment extends Fragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
-        // TODO: アダプターの設定
+        // アダプターの設定
         TodoListRecyclerViewAdapter adapter = new TodoListRecyclerViewAdapter();
         recyclerView.setAdapter(adapter);
         if (listener != null) {
             listener.getTodoList(listId, todoList -> {
-                // TODO: RecyclerViewにデータを表示する
-                for (Todo item : todoList) {
-                    Log.d("TEST", "TodoListItem = " + item.todoTitle);
+                this.todoList = todoList;
+                Activity activity = getActivity();
+                if (activity != null) {
+                    // adapterにデータの変更を知らせる
+                    activity.runOnUiThread(adapter::notifyDataSetChanged);
                 }
             });
         }
+    }
+
+    public void updateTodoDataList(List<Todo> todoList) {
+        this.todoList = todoList;
+        recyclerView.getAdapter().notifyDataSetChanged();
     }
     class TodoListRecyclerViewAdapter extends RecyclerView.Adapter<TodoListViewHolder> {
 
         @NonNull
         @Override
         public TodoListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            // TODO:
-            return null;
+            LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+            View view = inflater.inflate(R.layout.layout_todo_list_item, parent, false);
+            return new TodoListViewHolder(view);
         }
 
         @Override
         public void onBindViewHolder(@NonNull TodoListViewHolder holder, int position) {
-            // TODO:
+            // 表示データの取得
+            Todo todoData = todoList.get(position);
+            holder.itemTile.setText(todoData.todoTitle);
+            holder.todoCheck.setChecked(todoData.isDone);
+            holder.todoCheck.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                // チェックが変更されたら呼ばれる
+                if (listener != null) {
+                    todoData.isDone = isChecked;
+                    listener.onChangeTodoCheck(todoData);
+                }
+            });
         }
 
         @Override
         public int getItemCount() {
-            // TODO:
-            return 0;
+            return todoList.size();
         }
     }
 
     class TodoListViewHolder extends RecyclerView.ViewHolder {
-        // TODO:
+        CheckBox todoCheck;
+        TextView itemTile;
         public TodoListViewHolder(@NonNull View itemView) {
             super(itemView);
+            todoCheck = itemView.findViewById(R.id.todo_check_box);
+            itemTile = itemView.findViewById(R.id.todo_item_title);
         }
     }
 }
