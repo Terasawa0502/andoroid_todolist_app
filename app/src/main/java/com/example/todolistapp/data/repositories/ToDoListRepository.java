@@ -42,4 +42,8 @@ public class ToDoListRepository {
     public LiveData<List<TodoSheet>> getAllTodoSheet() {
         return listTodoSheet;
     }
+
+    public void updateTodoData(Todo item) {
+        todoDao.updateTodoData(item);
+    }
 }

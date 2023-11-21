@@ -80,4 +80,7 @@ public class TopViewModel extends ViewModel {
         currentPosition = position;
     }
 
+    public void updateTodoData(Todo todo) {
+        repository.updateTodoData(todo);
+    }
 }
