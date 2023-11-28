@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.splashscreen.SplashScreen;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -20,6 +21,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+
 import com.example.todolistapp.R;
 import com.example.todolistapp.data.entities.Todo;
 import com.example.todolistapp.data.entities.TodoSheet;
@@ -62,6 +64,9 @@ public class TopActivity extends AppCompatActivity implements TextWatcher, ToDoS
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // スプラシュスクリーンの設定
+        SplashScreen.installSplashScreen(this);
+        setTheme(R.style.Theme_ToDoListApp);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         // ナビゲーション設定

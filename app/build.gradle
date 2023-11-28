@@ -38,6 +38,7 @@ dependencies {
     implementation 'androidx.viewpager2:viewpager2:1.0.0'
     implementation "androidx.room:room-runtime:$room_version"
     implementation "com.google.dagger:hilt-android:2.44"
+    implementation "androidx.core:core-splashscreen:1.0.1"
     annotationProcessor "com.google.dagger:hilt-android-compiler:2.44"
     annotationProcessor "androidx.room:room-compiler:$room_version"
     testImplementation 'junit:junit:4.13.2'
