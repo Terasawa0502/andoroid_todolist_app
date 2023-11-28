@@ -13,7 +13,6 @@
         android:icon="@drawable/ic_trash"
         android:title="ゴミ箱" />
 
-<!--  TODO: 一番下に配置したい  -->
     <item
         android:id="@+id/newCreate"
         android:icon="@drawable/ic_plus"

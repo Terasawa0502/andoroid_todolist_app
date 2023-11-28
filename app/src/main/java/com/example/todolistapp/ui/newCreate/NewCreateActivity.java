@@ -29,7 +29,12 @@ public class NewCreateActivity extends AppCompatActivity {
         findViewById(R.id.cancel_btn).setOnClickListener(v -> {
             finish();
         });
+    }
 
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.slide_in_down, R.anim.slide_out_down);
     }
 
 }
