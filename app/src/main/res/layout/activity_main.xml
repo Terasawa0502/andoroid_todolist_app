@@ -63,21 +63,31 @@
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/btn"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
             android:layout_margin="16dp"
             android:src="@drawable/ic_checks"
             app:tint="#fff"
             app:backgroundTint="@color/cityBlue"/>
 
-        <Button
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/garbage_btn"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="bottom|start"
             android:layout_margin="16dp"
-            android:src="@drawable/ic_trash"/>
+            android:src="@drawable/ic_trash"
+            app:tint="#fff"
+            app:backgroundTint="@color/cityBlue"/>
+
+<!--        <Button-->
+<!--            android:id="@+id/garbage_btn"-->
+<!--            android:layout_width="64dp"-->
+<!--            android:layout_height="64dp"-->
+<!--            android:layout_gravity="bottom|start"-->
+<!--            android:layout_margin="16dp"-->
+<!--            android:src="@drawable/ic_trash"/>-->
 
         <androidx.appcompat.widget.LinearLayoutCompat
             android:id="@+id/bottom_sheet"
