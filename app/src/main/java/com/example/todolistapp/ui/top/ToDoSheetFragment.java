@@ -2,6 +2,7 @@ package com.example.todolistapp.ui.top;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Paint;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -10,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.TextPaint;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -98,6 +100,21 @@ public class ToDoSheetFragment extends Fragment {
         this.todoList = todoList;
         recyclerView.getAdapter().notifyDataSetChanged();
     }
+
+    /**
+     * 打ち消し線表示切り替え処理
+     * @param isVisible
+     * @param textView
+     */
+    private void switchStrikethrough(Boolean isVisible, TextView textView) {
+        TextPaint paint = textView.getPaint();
+        if (isVisible) {
+            paint.setFlags(textView.getPaintFlags() | TextPaint.STRIKE_THRU_TEXT_FLAG);
+            paint.setAntiAlias(true);
+        } else {
+            paint.setFlags(textView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+        }
+    }
     class TodoListRecyclerViewAdapter extends RecyclerView.Adapter<TodoListViewHolder> {
 
         @NonNull
@@ -114,11 +131,13 @@ public class ToDoSheetFragment extends Fragment {
             Todo todoData = todoList.get(position);
             holder.itemTile.setText(todoData.todoTitle);
             holder.todoCheck.setChecked(todoData.isDone);
+            switchStrikethrough(todoData.isDone, holder.itemTile);
             holder.todoCheck.setOnCheckedChangeListener((buttonView, isChecked) -> {
                 // チェックが変更されたら呼ばれる
                 if (listener != null) {
                     todoData.isDone = isChecked;
                     listener.onChangeTodoCheck(todoData);
+                    recyclerView.getAdapter().notifyDataSetChanged();
                 }
             });
         }

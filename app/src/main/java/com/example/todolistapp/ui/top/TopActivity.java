@@ -54,7 +54,7 @@ public class TopActivity extends AppCompatActivity implements TextWatcher, ToDoS
                     Intent data = result.getData();
                     String title = data.getStringExtra(NewCreateActivity.KEY_TITLE);
                     Log.d("TEST", "title = " +title);
-                    // TODO:titleをデータベースに入れる
+                    //　titleをデータベースに入れる
                     topViewModel.insertToDoSheet(title, () -> {
                         // nothing to do
                         });
@@ -65,7 +65,6 @@ public class TopActivity extends AppCompatActivity implements TextWatcher, ToDoS
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // スプラシュスクリーンの設定
-        SplashScreen.installSplashScreen(this);
         setTheme(R.style.Theme_ToDoListApp);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -116,11 +115,8 @@ public class TopActivity extends AppCompatActivity implements TextWatcher, ToDoS
 
         // リスト横の+ボタンを押した時の挙動
         findViewById(R.id.plus_btn).setOnClickListener(v -> {
-          // TODO: NewCreateActivityに表示する
-          Intent intent = new Intent(this, NewCreateActivity.class);
-          // Activityを呼び出して終了したら通知を受け取る
-          startForResult.launch(intent);
-          overridePendingTransition(R.anim.slide_in_up,R.anim.slide_out_up);
+          // NewCreateActivityに表示する
+          moveToNewCreateActivity();
         });
 
         // observeの設定(LiveDataの値が変更された場合の処理を記述)
@@ -129,13 +125,13 @@ public class TopActivity extends AppCompatActivity implements TextWatcher, ToDoS
                 @Override
                 public void run() {
                     for (TodoSheet todoSheet: todoSheetList) {
-                        // TODO: Todoの項目データを取得
+                        // Todoの項目データを取得
                         List<Todo> todoList = topViewModel.getTodoListById(todoSheet.id);
                         for (Todo item: todoList) {
                             Log.d("TEST", "item = " + item.todoTitle);
                         }
                     }
-                    // TODO: 箱を入れ替える
+                    // 箱を入れ替える
                     runOnUiThread(() -> {
                         ((TodoSheetPagerAdapter) viewPager.getAdapter()).updateTodoSheetList(todoSheetList);
                     });
@@ -172,6 +168,15 @@ public class TopActivity extends AppCompatActivity implements TextWatcher, ToDoS
         toggle.syncState();
     }
 
+    // リスト追加用の画面遷移処理
+    private void moveToNewCreateActivity() {
+        // NewCreateActivityに表示する
+        Intent intent = new Intent(this, NewCreateActivity.class);
+        // Activityを呼び出して終了したら通知を受け取る
+        startForResult.launch(intent);
+        overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up);
+    }
+
     /**
      * ナビゲーションメニューの設定
      */
@@ -181,20 +186,23 @@ public class TopActivity extends AppCompatActivity implements TextWatcher, ToDoS
         navigationView.setNavigationItemSelectedListener(item -> {
             int itemId = item.getItemId();
             if (itemId == R.id.calenderScreen) {
-                // TODO: カレンダー選択時の処理
+                // カレンダー選択時の処理
                 Intent intent = new Intent(this, NewCalenderActivity.class);
                 startActivity(intent);
                 Log.d(TAG, "カレンダーを選択");
             } else if (itemId == R.id.timeLimit) {
-                // TODO: 期限付き選択時の処理
+                // 期限付き選択時の処理
                 Intent intent = new Intent(this, TimeLimitActivity.class);
                 startActivity(intent);
                 Log.d(TAG, "期限付きを選択");
             } else if (itemId == R.id.garbageBox) {
-                // TODO: ゴミ箱選択時の処理
+                // ゴミ箱選択時の処理
                 Intent intent = new Intent(this, GarbageActivity.class);
                 startActivity(intent);
                 Log.d(TAG, "ゴミ箱を選択");
+            } else if (itemId == R.id.newCreate) {
+                // 新しいリスト選択時の処理
+                moveToNewCreateActivity();
             }
             if (drawer != null) {
                 // ドロワーを閉じる
@@ -208,7 +216,8 @@ public class TopActivity extends AppCompatActivity implements TextWatcher, ToDoS
      * ボトムシートの設定
      */
     private void bottomSheetAndFabSettings() {
-        FloatingActionButton btn = findViewById(R.id.btn);
+        FloatingActionButton addBtn = findViewById(R.id.btn);
+        FloatingActionButton garbageBtn = findViewById(R.id.garbage_btn);
         View bottomSheet = findViewById(R.id.bottom_sheet);
         EditText inputTitleText = bottomSheet.findViewById(R.id.input_title_text);
         BottomSheetBehavior behavior = BottomSheetBehavior.from(bottomSheet);
@@ -216,13 +225,15 @@ public class TopActivity extends AppCompatActivity implements TextWatcher, ToDoS
             @Override
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
                 if (newState ==BottomSheetBehavior.STATE_COLLAPSED ) {
-                    btn.setVisibility(View.VISIBLE);
+                    addBtn.setVisibility(View.VISIBLE);
+                    garbageBtn.setVisibility(View.VISIBLE);
                     if (inputTitleText == null) return;
                     KeyboardUtil.hideSoftKeyboard(TopActivity.this, inputTitleText);
                 } else if (newState == BottomSheetBehavior.STATE_EXPANDED) {
                     if (inputTitleText == null) return;
                     KeyboardUtil.showSoftKeyboard(TopActivity.this, inputTitleText);
-                    btn.setVisibility(View.GONE);
+                    addBtn.setVisibility(View.GONE);
+                    garbageBtn.setVisibility(View.GONE);
                 }
             }
             @Override
@@ -232,7 +243,7 @@ public class TopActivity extends AppCompatActivity implements TextWatcher, ToDoS
         });
 
         // FloatingActionButtonが押された時の挙動
-        btn.setOnClickListener(view -> {
+        addBtn.setOnClickListener(view -> {
             behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
         });
 
