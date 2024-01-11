@@ -137,7 +137,13 @@ public class ToDoSheetFragment extends Fragment {
                 if (listener != null) {
                     todoData.isDone = isChecked;
                     listener.onChangeTodoCheck(todoData);
-                    recyclerView.getAdapter().notifyDataSetChanged();
+//                    getActivity().runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            recyclerView.getAdapter().notifyDataSetChanged();
+//                        }
+//                    });
+
                 }
             });
         }
